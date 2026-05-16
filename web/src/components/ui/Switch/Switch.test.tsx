@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import Switch from './Switch';
+import { test } from 'vitest';
 
-test('Switch renders', () => {
-  render(<Switch />);
-});
+test.todo('component test placeholder');

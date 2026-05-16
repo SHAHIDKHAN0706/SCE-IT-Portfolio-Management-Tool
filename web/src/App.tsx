@@ -32,6 +32,7 @@ function UploadWizard({ onApply }: { onApply: (rows: Initiative[]) => void }) {
   const [open, setOpen] = useState(false);
   const [rows, setRows] = useState<Record<string, unknown>[]>([]);
   const [mapping, setMapping] = useState<Record<string, string>>({});
+  const [error, setError] = useState('');
   return (
     <>
       <Button onClick={() => setOpen(true)}>Load .xlsx</Button>
@@ -40,8 +41,15 @@ function UploadWizard({ onApply }: { onApply: (rows: Initiative[]) => void }) {
           <input type='file' accept='.xlsx,.xls' onChange={async (e) => {
             const file = e.target.files?.[0];
             if (!file) return;
-            if (file.size > 5 * 1024 * 1024) return;
-            if (!/\.xlsx?$/.test(file.name.toLowerCase())) return;
+            setError('');
+            if (file.size > 5 * 1024 * 1024) {
+              setError('File exceeds 5MB limit. Please upload a smaller workbook.');
+              return;
+            }
+            if (!/\.xlsx?$/.test(file.name.toLowerCase())) {
+              setError('Unsupported file format. Please upload a .xlsx or .xls file.');
+              return;
+            }
             const wb = XLSX.read(await file.arrayBuffer(), { type: 'array', cellFormula: false, cellHTML: false });
             const ws = wb.Sheets[wb.SheetNames[0]];
             const json = XLSX.utils.sheet_to_json<Record<string, unknown>>(ws, { defval: '' });
@@ -50,6 +58,7 @@ function UploadWizard({ onApply }: { onApply: (rows: Initiative[]) => void }) {
             const auto = Object.fromEntries(headers.map((h) => [h, fields.find((f) => h.toLowerCase().replace(/\s+/g, '') === f.toLowerCase()) ?? '']));
             setMapping(auto);
           }} />
+          {error ? <div>{error}</div> : null}
           {Object.keys(mapping).map((src) => (
             <div key={src}>
               <span>{src}</span>

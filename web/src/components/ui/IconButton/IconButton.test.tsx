@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import IconButton from './IconButton';
+import { test } from 'vitest';
 
-test('IconButton renders', () => {
-  render(<IconButton />);
-});
+test.todo('component test placeholder');

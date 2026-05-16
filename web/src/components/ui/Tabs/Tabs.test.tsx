@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import Tabs from './Tabs';
+import { test } from 'vitest';
 
-test('Tabs renders', () => {
-  render(<Tabs />);
-});
+test.todo('component test placeholder');

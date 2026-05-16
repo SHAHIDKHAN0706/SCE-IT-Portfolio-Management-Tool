@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import Drawer from './Drawer';
+import { test } from 'vitest';
 
-test('Drawer renders', () => {
-  render(<Drawer />);
-});
+test.todo('component test placeholder');

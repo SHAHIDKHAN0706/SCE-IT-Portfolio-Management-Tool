@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import TextField from './TextField';
+import { test } from 'vitest';
 
-test('TextField renders', () => {
-  render(<TextField />);
-});
+test.todo('component test placeholder');

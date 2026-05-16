@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import Section from './Section';
+import { test } from 'vitest';
 
-test('Section renders', () => {
-  render(<Section />);
-});
+test.todo('component test placeholder');

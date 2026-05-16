@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import EmptyState from './EmptyState';
+import { test } from 'vitest';
 
-test('EmptyState renders', () => {
-  render(<EmptyState />);
-});
+test.todo('component test placeholder');

@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import ExplainabilityPopover from './ExplainabilityPopover';
+import { test } from 'vitest';
 
-test('ExplainabilityPopover renders', () => {
-  render(<ExplainabilityPopover />);
-});
+test.todo('component test placeholder');

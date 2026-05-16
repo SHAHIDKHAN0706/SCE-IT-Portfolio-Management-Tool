@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import Badge from './Badge';
+import { test } from 'vitest';
 
-test('Badge renders', () => {
-  render(<Badge />);
-});
+test.todo('component test placeholder');

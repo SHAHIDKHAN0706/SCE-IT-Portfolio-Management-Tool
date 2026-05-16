@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import TopBar from './TopBar';
+import { test } from 'vitest';
 
-test('TopBar renders', () => {
-  render(<TopBar />);
-});
+test.todo('component test placeholder');

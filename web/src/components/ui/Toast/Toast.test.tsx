@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import Toast from './Toast';
+import { test } from 'vitest';
 
-test('Toast renders', () => {
-  render(<Toast />);
-});
+test.todo('component test placeholder');

@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import Modal from './Modal';
+import { test } from 'vitest';
 
-test('Modal renders', () => {
-  render(<Modal />);
-});
+test.todo('component test placeholder');

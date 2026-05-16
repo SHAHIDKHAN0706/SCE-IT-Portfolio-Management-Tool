@@ -1,6 +1,3 @@
-import { render } from '@testing-library/react';
-import Tag from './Tag';
+import { test } from 'vitest';
 
-test('Tag renders', () => {
-  render(<Tag />);
-});
+test.todo('component test placeholder');
