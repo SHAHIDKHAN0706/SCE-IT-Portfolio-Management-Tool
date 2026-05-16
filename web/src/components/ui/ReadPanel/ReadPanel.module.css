@@ -1,0 +1,6 @@
+.root {
+  border: 0.0625rem solid var(--border-subtle);
+  background: var(--bg-surface);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}

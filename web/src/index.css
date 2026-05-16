@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap');
+@import './styles/tokens.css';
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--bg-app);
+  color: var(--text-primary);
+}
+#root { min-height: 100vh; }
+.serif { font-family: 'Source Serif 4', Georgia, serif; }

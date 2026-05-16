@@ -1,0 +1,9 @@
+{
+  "bcr": 0.25,
+  "driverUrgency": 0.20,
+  "fundingPressure": 0.15,
+  "strategicAlignment": 0.15,
+  "timeToGoLive": 0.10,
+  "capitalEfficiency": 0.10,
+  "recommendationSignal": 0.05
+}

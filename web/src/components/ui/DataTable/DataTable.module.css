@@ -1,0 +1,6 @@
+.wrap { border: 0.0625rem solid var(--border-subtle); border-radius: 0.5rem; background: var(--paper); overflow: auto; }
+.table { border-collapse: collapse; width: 100%; }
+.th { position: sticky; top: 0; background: var(--sce-sky); text-align: left; padding: 0.5rem; border-bottom: 0.0625rem solid var(--border-subtle); }
+.td { padding: 0.5rem; border-bottom: 0.0625rem solid var(--slate-100); }
+.row:hover { background: var(--sce-sky); }
+.toolbar { display: flex; gap: 0.5rem; padding: 0.5rem; }
