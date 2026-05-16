@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Weather Dashboard</h1>
+      <div class="header-controls">
+        <label class="toggle" for="unit-toggle">
+          <span>°C/km/h</span>
+          <input id="unit-toggle" type="checkbox" aria-label="Toggle units" />
+          <span>°F/mph</span>
+        </label>
+        <label class="toggle" for="theme-toggle">
+          <span>☀️</span>
+          <input id="theme-toggle" type="checkbox" aria-label="Toggle dark theme" />
+          <span>🌙</span>
+        </label>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <section class="search-section card">
+        <div class="search-row">
+          <div class="search-input-wrap">
+            <input
+              id="city-input"
+              type="text"
+              placeholder="Search city (e.g. London)"
+              autocomplete="off"
+              aria-label="Search city"
+            />
+            <ul id="suggestions" class="suggestions" role="listbox" aria-label="City suggestions"></ul>
+          </div>
+          <button id="location-btn" class="btn" type="button">Use my location</button>
+        </div>
+        <p id="error-message" class="error-message" role="alert" hidden></p>
+        <div id="recent-searches" class="chips" aria-label="Recent searches"></div>
+      </section>
+
+      <section id="current-weather" class="card current-weather"></section>
+
+      <section class="card">
+        <h2>Next 24 Hours</h2>
+        <div id="hourly-forecast" class="hourly-strip"></div>
+      </section>
+
+      <section class="card">
+        <h2>7-Day Forecast</h2>
+        <div id="daily-forecast" class="daily-list"></div>
+      </section>
+    </main>
+
+    <div id="loading-overlay" class="loading-overlay" hidden>
+      <div class="spinner" aria-label="Loading"></div>
+    </div>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
