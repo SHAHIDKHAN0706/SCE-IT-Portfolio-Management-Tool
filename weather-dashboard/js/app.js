@@ -41,6 +41,8 @@ const state = {
   debounceTimer: null
 };
 
+const GEOLOCATION_TIMEOUT_MS = 10000;
+
 function applyTheme(preference) {
   if (preference === 'dark' || preference === 'light') {
     document.documentElement.dataset.theme = preference;
@@ -121,6 +123,7 @@ function parseButtonLocation(button) {
   return {
     name: button.dataset.name || 'Unknown',
     country: button.dataset.country || 'Unknown',
+    admin1: button.dataset.admin1 || '',
     latitude: Number(button.dataset.latitude),
     longitude: Number(button.dataset.longitude)
   };
@@ -139,15 +142,53 @@ function handleSuggestionClick(event) {
   loadForecast(location, true);
 }
 
-function handleRecentClick(event) {
+async function resolveRecentSearchLocation(search) {
+  const candidates = await searchCities(search.name);
+  const normalizedName = search.name.toLowerCase();
+  const normalizedCountry = search.country.toLowerCase();
+  const normalizedAdmin1 = (search.admin1 || '').toLowerCase();
+
+  const match = candidates.find((candidate) => {
+    const sameName = candidate.name?.toLowerCase() === normalizedName;
+    const sameCountry = (candidate.country || '').toLowerCase() === normalizedCountry;
+    const sameAdmin1 =
+      !normalizedAdmin1 || (candidate.admin1 || '').toLowerCase() === normalizedAdmin1;
+    return sameName && sameCountry && sameAdmin1;
+  });
+
+  if (!match) {
+    throw new Error('Search location not found');
+  }
+
+  return {
+    name: match.name,
+    country: match.country || 'Unknown',
+    admin1: match.admin1 || '',
+    latitude: match.latitude,
+    longitude: match.longitude
+  };
+}
+
+async function handleRecentClick(event) {
   const button = event.target.closest('button');
 
   if (!button) {
     return;
   }
 
-  const location = parseButtonLocation(button);
-  loadForecast(location, true);
+  const search = {
+    name: button.dataset.name || 'Unknown',
+    country: button.dataset.country || 'Unknown',
+    admin1: button.dataset.admin1 || ''
+  };
+
+  try {
+    const location = await resolveRecentSearchLocation(search);
+    elements.cityInput.value = `${location.name}, ${location.country}`;
+    await loadForecast(location, true);
+  } catch {
+    setError(elements.errorMessage, 'Could not reload that saved city. Please search again.');
+  }
 }
 
 function handleUnitToggle() {
@@ -165,10 +206,6 @@ function handleThemeToggle() {
 function loadRecentSearches() {
   const recents = getRecentSearches();
   renderRecentSearches(elements.recentSearches, recents);
-
-  if (recents.length > 0) {
-    loadForecast(recents[0], false);
-  }
 }
 
 async function handleUseMyLocation() {
@@ -215,7 +252,7 @@ async function handleUseMyLocation() {
         setError(elements.errorMessage, 'Unable to determine your location right now.');
       }
     },
-    { enableHighAccuracy: true, timeout: 10000 }
+    { enableHighAccuracy: true, timeout: GEOLOCATION_TIMEOUT_MS }
   );
 }
 

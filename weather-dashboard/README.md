@@ -10,7 +10,7 @@ A standalone weather dashboard built with plain HTML, CSS, and vanilla JavaScrip
 - Horizontal 24-hour forecast strip
 - 7-day forecast list
 - Weather code to description/icon mapping using emoji
-- Unit toggle (°C/kmh and °F/mph) with localStorage persistence
+- Unit toggle (°C/km/h and °F/mph) with localStorage persistence
 - Light/dark theme with `prefers-color-scheme` support and manual persisted toggle
 - Recent searches (last 5 successful city lookups)
 - Loading spinner and friendly error states

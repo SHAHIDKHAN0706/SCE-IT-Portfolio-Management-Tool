@@ -11,13 +11,21 @@ function kmhToMph(value) {
   return value / 1.609344;
 }
 
+function mmToInches(value) {
+  return value / 25.4;
+}
+
+function isImperialUnit(unit) {
+  return unit === 'imperial';
+}
+
 function formatTemp(value, unit) {
   if (typeof value !== 'number') {
     return '--';
   }
 
-  const converted = unit === 'imperial' ? celsiusToFahrenheit(value) : value;
-  const suffix = unit === 'imperial' ? '°F' : '°C';
+  const converted = isImperialUnit(unit) ? celsiusToFahrenheit(value) : value;
+  const suffix = isImperialUnit(unit) ? '°F' : '°C';
   return `${Math.round(converted)}${suffix}`;
 }
 
@@ -26,9 +34,19 @@ function formatSpeed(value, unit) {
     return '--';
   }
 
-  const converted = unit === 'imperial' ? kmhToMph(value) : value;
-  const suffix = unit === 'imperial' ? 'mph' : 'km/h';
+  const converted = isImperialUnit(unit) ? kmhToMph(value) : value;
+  const suffix = isImperialUnit(unit) ? 'mph' : 'km/h';
   return `${Math.round(converted)} ${suffix}`;
+}
+
+function formatPrecipitation(value, unit) {
+  if (typeof value !== 'number') {
+    return '--';
+  }
+
+  const roundedValue = isImperialUnit(unit) ? mmToInches(value) : value;
+  const suffix = isImperialUnit(unit) ? 'in' : 'mm';
+  return `${roundedValue.toFixed(1)} ${suffix}`;
 }
 
 function directionFromDegrees(degrees) {
@@ -131,7 +149,7 @@ export function renderCurrentWeather(container, location, forecast, unit) {
     'Wind',
     `${formatSpeed(current.wind_speed_10m, unit)} ${directionFromDegrees(current.wind_direction_10m)}`
   );
-  appendStat(stats, 'Precipitation', `${Math.round(current.precipitation)} mm`);
+  appendStat(stats, 'Precipitation', formatPrecipitation(current.precipitation, unit));
 
   container.appendChild(stats);
 }
@@ -199,7 +217,7 @@ export function renderDailyForecast(container, forecast, unit) {
 
     const precipitation = document.createElement('div');
     precipitation.className = 'daily-precip';
-    precipitation.textContent = `Precipitation: ${Math.round(precipSums[index] || 0)} mm`;
+    precipitation.textContent = `Precipitation: ${formatPrecipitation(precipSums[index] || 0, unit)}`;
 
     item.append(dayLabel, icon, temperatures, precipitation);
     container.appendChild(item);
@@ -217,6 +235,7 @@ export function renderSuggestions(container, suggestions) {
     button.dataset.longitude = String(result.longitude);
     button.dataset.name = result.name;
     button.dataset.country = result.country || '';
+    button.dataset.admin1 = result.admin1 || '';
     button.textContent = `${result.name}, ${result.country || 'Unknown'}`;
     listItem.appendChild(button);
     container.appendChild(listItem);
@@ -229,10 +248,9 @@ export function renderRecentSearches(container, searches) {
   searches.forEach((search) => {
     const button = document.createElement('button');
     button.type = 'button';
-    button.dataset.latitude = String(search.latitude);
-    button.dataset.longitude = String(search.longitude);
     button.dataset.name = search.name;
     button.dataset.country = search.country;
+    button.dataset.admin1 = search.admin1 || '';
     button.textContent = `${search.name}, ${search.country}`;
     container.appendChild(button);
   });

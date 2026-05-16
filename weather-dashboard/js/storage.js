@@ -18,20 +18,38 @@ function safeParse(value, fallback) {
 }
 
 export function getRecentSearches() {
-  return safeParse(localStorage.getItem(RECENT_SEARCHES_KEY), []);
+  const parsed = safeParse(localStorage.getItem(RECENT_SEARCHES_KEY), []);
+
+  if (!Array.isArray(parsed)) {
+    return [];
+  }
+
+  return parsed
+    .map((item) => ({
+      name: item?.name || 'Unknown',
+      country: item?.country || 'Unknown',
+      admin1: item?.admin1 || ''
+    }))
+    .slice(0, 5);
 }
 
 export function addRecentSearch(searchItem) {
+  const sanitizedSearchItem = {
+    name: searchItem.name || 'Unknown',
+    country: searchItem.country || 'Unknown',
+    admin1: searchItem.admin1 || ''
+  };
+
   const current = getRecentSearches();
   const deduped = current.filter(
     (item) =>
       !(
-        item.name?.toLowerCase() === searchItem.name?.toLowerCase() &&
-        item.country?.toLowerCase() === searchItem.country?.toLowerCase()
+        item.name?.toLowerCase() === sanitizedSearchItem.name.toLowerCase() &&
+        item.country?.toLowerCase() === sanitizedSearchItem.country.toLowerCase()
       )
   );
 
-  const next = [searchItem, ...deduped].slice(0, 5);
+  const next = [sanitizedSearchItem, ...deduped].slice(0, 5);
   localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(next));
   return next;
 }
