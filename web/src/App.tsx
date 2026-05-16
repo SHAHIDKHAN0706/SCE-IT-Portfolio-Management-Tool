@@ -27,6 +27,34 @@ const navItems = [
 ];
 
 const fields = ['id', 'name', 'portfolioName', 'valueStream', 'funded', 'fundingStatus', 'fundingSource', 'driver', 'recommendation', 'bcr', 'totalCapitalCost', 'goLive', 'ouSponsor', 'outcomes', 'classification', 'capability', 'dependsOn', 'year2026', 'year2027', 'year2028'];
+const MAX_UPLOAD_ROWS = 2000;
+const MAX_UPLOAD_COLS = 200;
+const PROHIBITED_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
+
+function parseSheetSafely(sheet: XLSX.WorkSheet) {
+  const matrix = XLSX.utils.sheet_to_json<(string | number | boolean | null)[]>(sheet, {
+    header: 1,
+    raw: false,
+    blankrows: false,
+    defval: '',
+  });
+  const bounded = matrix.slice(0, MAX_UPLOAD_ROWS + 20).map((row) => row.slice(0, MAX_UPLOAD_COLS));
+  const headerRow = bounded.find((row) => row.some((cell) => String(cell ?? '').trim().length > 0)) ?? [];
+  const headers = headerRow
+    .map((cell, idx) => String(cell ?? '').trim() || `Column_${idx + 1}`)
+    .filter((header) => !PROHIBITED_KEYS.has(header.toLowerCase()));
+  const dataRows = bounded.slice(bounded.indexOf(headerRow) + 1, bounded.indexOf(headerRow) + 1 + MAX_UPLOAD_ROWS);
+  const rows = dataRows
+    .filter((row) => row.some((cell) => String(cell ?? '').trim().length > 0))
+    .map((row) => {
+      const safe = Object.create(null) as Record<string, unknown>;
+      headers.forEach((header, index) => {
+        safe[header] = row[index] ?? '';
+      });
+      return safe;
+    });
+  return { headers, rows };
+}
 
 function UploadWizard({ onApply }: { onApply: (rows: Initiative[]) => void }) {
   const [open, setOpen] = useState(false);
@@ -50,11 +78,20 @@ function UploadWizard({ onApply }: { onApply: (rows: Initiative[]) => void }) {
               setError('Unsupported file format. Please upload a .xlsx or .xls file.');
               return;
             }
-            const wb = XLSX.read(await file.arrayBuffer(), { type: 'array', cellFormula: false, cellHTML: false });
+            const wb = XLSX.read(await file.arrayBuffer(), {
+              type: 'array',
+              cellFormula: false,
+              cellHTML: false,
+              cellText: false,
+              dense: true,
+            });
             const ws = wb.Sheets[wb.SheetNames[0]];
-            const json = XLSX.utils.sheet_to_json<Record<string, unknown>>(ws, { defval: '' });
+            const { headers, rows: json } = parseSheetSafely(ws);
+            if (!json.length) {
+              setError('No usable rows found in uploaded workbook.');
+              return;
+            }
             setRows(json);
-            const headers = Object.keys(json[0] ?? {});
             const auto = Object.fromEntries(headers.map((h) => [h, fields.find((f) => h.toLowerCase().replace(/\s+/g, '') === f.toLowerCase()) ?? '']));
             setMapping(auto);
           }} />
