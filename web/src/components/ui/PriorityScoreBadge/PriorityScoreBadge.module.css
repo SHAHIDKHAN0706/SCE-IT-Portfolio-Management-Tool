@@ -1,0 +1,4 @@
+.root { border: 0.0625rem solid var(--border-subtle); border-radius: 999rem; padding: 0.2rem 0.5rem; font-weight: 700; }
+.high { background: var(--color-success); }
+.mid { background: var(--color-warning); }
+.low { background: var(--color-danger); color: var(--paper); }

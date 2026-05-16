@@ -1,0 +1,29 @@
+:root {
+  --sce-blue: #0073CF;
+  --sce-blue-dark: #002A3A;
+  --sce-blue-light: #4FA3DC;
+  --sce-sky: #E6F2FB;
+  --sce-gold: #FDB913;
+  --sce-green: #6CC24A;
+  --sce-red: #C8102E;
+  --sce-orange: #F26522;
+  --sce-teal: #00A3AD;
+  --ink: #1A1A1A;
+  --slate-700: #3C4858;
+  --slate-500: #6B7785;
+  --slate-300: #C9D1D9;
+  --slate-100: #EEF2F6;
+  --paper: #FFFFFF;
+  --canvas: #F7F9FC;
+  --color-primary: var(--sce-blue);
+  --color-primary-strong: var(--sce-blue-dark);
+  --color-success: var(--sce-green);
+  --color-danger: var(--sce-red);
+  --color-warning: var(--sce-orange);
+  --color-accent: var(--sce-gold);
+  --bg-app: var(--canvas);
+  --bg-surface: var(--paper);
+  --text-primary: var(--ink);
+  --text-secondary: var(--slate-500);
+  --border-subtle: var(--slate-300);
+}

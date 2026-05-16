@@ -1,0 +1,8 @@
+.button { border: 0.0625rem solid var(--border-subtle); border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-weight: 600; cursor: pointer; background: var(--bg-surface); color: var(--text-primary); }
+.primary { background: var(--color-primary); color: var(--paper); border-color: var(--color-primary); }
+.secondary { background: var(--bg-surface); }
+.ghost { border-color: transparent; background: transparent; }
+.danger { background: var(--color-danger); color: var(--paper); border-color: var(--color-danger); }
+.sm { font-size: 0.8rem; }
+.md { font-size: 0.9rem; }
+.lg { font-size: 1rem; }

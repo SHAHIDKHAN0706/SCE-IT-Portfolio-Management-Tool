@@ -1,0 +1,9 @@
+node_modules/
+**/node_modules/
+**/dist/
+**/.pytest_cache/
+**/__pycache__/
+**/*.pyc
+**/.coverage
+**/*.egg-info/
+web/playwright-report/

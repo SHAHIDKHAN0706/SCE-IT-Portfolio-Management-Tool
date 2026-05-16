@@ -1,0 +1,2 @@
+.wrap { display: flex; flex-wrap: wrap; gap: 0.3rem; border: 0.0625rem solid var(--border-subtle); border-radius: 0.5rem; padding: 0.5rem; background: var(--paper); }
+.item { color: var(--text-primary); font-size: 0.85rem; }

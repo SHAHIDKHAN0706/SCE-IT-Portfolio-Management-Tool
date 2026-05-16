@@ -1,37 +1,44 @@
 # SCE IT Portfolio Management Tool
 
-A React 18 + Vite single-page app and FastAPI backend for managing the SCE IT portfolio:
-filter by portfolio / value stream / funding / driver / BCR / recommendation, run a
-**prioritization engine** that detects overlapping projects and interdependencies, and
-generate an executive PowerPoint on demand.
+React 18 + Vite web app and FastAPI backend for SCE IT portfolio analytics and prioritization.
 
-> 🚧 Scaffold in progress — see [`SCE_IT_Portfolio_Tool_BUILD_PROMPT.md`](./SCE_IT_Portfolio_Tool_BUILD_PROMPT.md)
-> for the full specification. The initial implementation is being delivered via an
-> automated coding-agent PR.
-
-## Quickstart (after scaffold lands)
+## Quickstart
 
 ```bash
-# Web
-cd web && npm install && npm run dev
+# web
+cd web
+npm install
+npm run dev
 
-# API (optional, for live PPM connectors + server-side PPT)
-cd api && pip install -e . && uvicorn src.main:app --reload
+# api
+cd ../api
+pip install -e .[test]
+uvicorn src.main:app --reload
+```
 
-# Full stack
+## Full stack (docker)
+
+```bash
 docker compose up
 ```
 
-## Status
+- Web: http://localhost:5173
+- API docs: http://localhost:8000/docs
 
-| Surface | Status |
-|---|---|
-| Repo scaffold | ⏳ initial PR |
-| React web app (5 views) | ⏳ initial PR |
-| Prioritization engine | ⏳ initial PR |
-| Client-side PPTX export | ⏳ initial PR |
-| FastAPI + connectors (UMT360, Daptiv) | ⏳ initial PR |
-| Server-side PPTX + scheduled job | ⏳ initial PR |
+## Screenshots
 
-See the build prompt for the full functional, UI/UX, integration, and acceptance
-criteria.
+- `docs/assets/overview.png` (placeholder)
+- `docs/assets/prioritization.png` (placeholder)
+- `docs/assets/deck-thumbnail.png` (placeholder)
+
+## Deploy
+
+- Build web: `cd web && npm run build`
+- Run API: `cd api && uvicorn src.main:app --host 0.0.0.0 --port 8000`
+- Use Dockerfiles for containerized deploys.
+
+## References
+
+- [Build prompt](./SCE_IT_Portfolio_Tool_BUILD_PROMPT.md)
+- [Architecture](./ARCHITECTURE.md)
+- [Prioritization](./docs/prioritization.md)
