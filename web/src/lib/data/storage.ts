@@ -6,7 +6,7 @@ const WEIGHT_KEY = 'sce-priority-weights';
 export const loadDataset = async (): Promise<Initiative[]> => {
   const local = localStorage.getItem(KEY);
   if (local) return JSON.parse(local) as Initiative[];
-  const response = await fetch('/sample/snapshot.json');
+  const response = await fetch(`${import.meta.env.BASE_URL}sample/snapshot.json`);
   return response.json() as Promise<Initiative[]>;
 };
 
