@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import * as XLSX from 'xlsx';
 import Button from '../Button/Button';
 import styles from './DataTable.module.css';
 
@@ -18,15 +17,28 @@ export default function DataTable<T extends object>({ rows, columns }: Props<T>)
     });
   }, [rows, sortKey, ascending]);
 
+  const exportCsv = () => {
+    const keys = columns.map((c) => String(c.key));
+    const escape = (value: unknown) => `"${String(value ?? '').replace(/"/g, '""')}"`;
+    const lines = [
+      keys.map(escape).join(','),
+      ...rows.map((row) => keys.map((k) => escape((row as Record<string, unknown>)[k])).join(',')),
+    ];
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'export.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className={styles.wrap}>
       <div className={styles.toolbar}>
-        <Button size="sm" onClick={() => {
-          const ws = XLSX.utils.json_to_sheet(rows);
-          const wb = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, 'table');
-          XLSX.writeFile(wb, 'export.csv', { bookType: 'csv' });
-        }}>Export CSV</Button>
+        <Button size="sm" onClick={exportCsv}>Export CSV</Button>
       </div>
       <table className={styles.table}>
         <thead>

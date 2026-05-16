@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import { AppShell, Sidebar, TopBar, Select, MultiSelect, SearchField, Button, FilterChip } from './components/ui';
 import type { Filters, Initiative } from './types/model';
 import { applyFilters, defaultFilters } from './lib/data/filter';
@@ -31,13 +31,7 @@ const MAX_UPLOAD_ROWS = 2000;
 const MAX_UPLOAD_COLS = 200;
 const PROHIBITED_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
 
-function parseSheetSafely(sheet: XLSX.WorkSheet) {
-  const matrix = XLSX.utils.sheet_to_json<(string | number | boolean | null)[]>(sheet, {
-    header: 1,
-    raw: false,
-    blankrows: false,
-    defval: '',
-  });
+function parseSheetSafely(matrix: unknown[][]) {
   const bounded = matrix.slice(0, MAX_UPLOAD_ROWS + 20).map((row) => row.slice(0, MAX_UPLOAD_COLS));
   const headerRow = bounded.find((row) => row.some((cell) => String(cell ?? '').trim().length > 0)) ?? [];
   const headers = headerRow
@@ -78,15 +72,15 @@ function UploadWizard({ onApply }: { onApply: (rows: Initiative[]) => void }) {
               setError('Unsupported file format. Please upload a .xlsx or .xls file.');
               return;
             }
-            const wb = XLSX.read(await file.arrayBuffer(), {
-              type: 'array',
-              cellFormula: false,
-              cellHTML: false,
-              cellText: false,
-              dense: true,
-            });
-            const ws = wb.Sheets[wb.SheetNames[0]];
-            const { headers, rows: json } = parseSheetSafely(ws);
+            const workbook = new ExcelJS.Workbook();
+            await workbook.xlsx.load(await file.arrayBuffer());
+            const worksheet = workbook.worksheets[0];
+            if (!worksheet) {
+              setError('No worksheet found in uploaded workbook.');
+              return;
+            }
+            const matrix = worksheet.getSheetValues().slice(1).map((row) => (Array.isArray(row) ? row.slice(1) : []));
+            const { headers, rows: json } = parseSheetSafely(matrix);
             if (!json.length) {
               setError('No usable rows found in uploaded workbook.');
               return;
