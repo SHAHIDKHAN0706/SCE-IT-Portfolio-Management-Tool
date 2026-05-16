@@ -1,20 +1,16 @@
 # SCE IT Portfolio Tool Build Prompt
 
-This file is committed to preserve the full implementation brief used for this PR.
+This repository uses this file as the source specification reference for implementation planning and PR traceability.
 
-## Scope implemented in this PR
+## Implemented first deliverable scope
 
-- React 18 + Vite + TypeScript web app with 6 sidebar views
-- SCE tokenized branding palette and typography
-- Reusable UI component library under `web/src/components/ui`
-- Bundled synthetic snapshot + sample XLSX upload flow
-- Prioritization scoring + overlap clustering + dependency graph
-- Client-side 13-slide PPTX export
-- FastAPI scaffold with adapter interface + UMT360/Daptiv stubs
-- Server-side PPTX endpoint scaffold
-- Dockerfiles + docker-compose + CI workflow
-- Documentation updates (`README`, `ARCHITECTURE`, prioritization/connectors/slide-spec docs)
+- Repo scaffold for static public deployment (`web/`, `docs/`, `.github/workflows/`, root docs).
+- Bundled synthetic snapshot at `web/public/sample/snapshot.json` with 120+ initiatives.
+- Static web app using HTML5 + vanilla JS + Chart.js.
+- Spreadsheet upload and column mapping wizard via SheetJS.
+- Client-side executive deck generation via PptxGenJS.
+- GitHub Pages deployment workflow and lightweight CI checks.
 
-## Source of truth
+## Notes
 
-If any discrepancy exists between this file and the issue statement in the PR, the issue statement takes precedence (including SCE palette override, six views including Prioritization, and 13-slide deck requirement).
+When mapping work items, reference this file and the issue statement section numbers (for example: §2.2, §2.3, §2.4, §2.5, §3.1, §3.2, §3.3, §3.4, §5.4, §7, §9.1).

@@ -1,9 +1,3 @@
-# Daptiv Connector (Stub)
+# Daptiv Connector (Deferred)
 
-Implemented as adapter stub in `api/src/adapters/daptiv.py`.
-
-Planned mapping examples:
-- Program -> `portfolioName`
-- Project Number -> `id`
-- ROI/BCR -> `bcr`
-- Cost Breakdown -> `year2026/year2027/year2028`
+Deferred to a future PR. See `SCE_IT_Portfolio_Tool_BUILD_PROMPT.md` for connector implementation sections.

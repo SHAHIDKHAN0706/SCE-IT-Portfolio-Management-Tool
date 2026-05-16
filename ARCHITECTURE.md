@@ -1,29 +1,16 @@
 # Architecture
 
-## Frontend
+## Current deliverable (static public demo)
 
-- React 18 + Vite SPA (`web/`)
-- Reusable UI primitives under `web/src/components/ui/`
-- Shared filtering and analytics views wired from canonical initiative model
-- Prioritization engine in `web/src/lib/prioritization/`
+- `web/index.html` hosts a static SPA shell.
+- `web/src/app.js` manages data load, filter state, rendering, upload/mapping flow, chart/table toggles, and exports.
+- `web/src/lib/analytics.js` computes KPIs and exhibit datasets from filtered records.
+- `web/src/lib/normalize.js` canonicalizes enum-like values from uploaded spreadsheets.
+- `web/src/lib/pptExport.js` builds the 11-slide client-side deck with PptxGenJS.
+- `web/public/sample/snapshot.json` provides bundled synthetic portfolio data for immediate analysis.
 
-## Backend
+## Deferred components (future PRs)
 
-- FastAPI service (`api/src/main.py`)
-- Adapter interface (`PortfolioDataAdapter`) with pluggable implementations
-- Stub adapters for UMT360 and Daptiv
-- Prioritization mirror implementation in Python for parity
-
-## Prioritization formula
-
-Each initiative is scored 0–100 by normalized factor weights:
-
-- `bcr`
-- `driverUrgency`
-- `fundingPressure`
-- `strategicAlignment`
-- `timeToGoLive`
-- `capitalEfficiency`
-- `recommendationSignal`
-
-`score = 100 * Σ(weight_i * normalized_factor_i)`
+- Backend API services (`api/`)
+- Infrastructure as code (`infrastructure/`)
+- Dockerized stack and connectors
