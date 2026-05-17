@@ -4,6 +4,7 @@ import { generateExecutiveDeck } from './lib/pptExport.js';
 
 const DATA_KEY = 'sce-portfolio-dataset-v1';
 const FILTER_KEY = 'sce-portfolio-filters-v1';
+const YEAR_SPLIT = { year2026: 0.34, year2027: 0.33, year2028: 0.33 };
 const viewsBase = ['Portfolio Overview', 'Funding Gap Analysis', 'Value Stream Detail', 'Initiatives Register', 'Decisions & Offsets'];
 
 let allData = [];
@@ -377,7 +378,8 @@ const detectHeaderRow = (rows) => {
 const buildMappingUI = () => {
   const fields = [
     ['capability', true], ['valueStream', true], ['portfolioName', true], ['funded', true], ['status', true], ['driver', true], ['totalCapitalCost', true],
-    ['recommendation', false], ['bcr', false], ['year2026', false], ['year2027', false], ['year2028', false], ['ouSponsor', false], ['outcomes', false], ['classification', false], ['fundingSource', false]
+    ['recommendation', false], ['bcr', false], ['year2026', false], ['year2027', false], ['year2028', false],
+    ['ouSponsor', false], ['outcomes', false], ['classification', false], ['fundingSource', false]
   ];
   const sheetName = $('sheetPicker').value;
   const ws = workbookState.workbook.Sheets[sheetName];
@@ -425,10 +427,11 @@ const applyMappedDataset = () => {
     .map((row, i) => {
       const get = (key) => row[workbookState.headers.indexOf(mapping[key])];
       const funded = normalizeFunded(get('funded'));
+      const mappedStatus = normalizeFundingStatus(get('status'), funded);
       const totalCapitalCost = Number(get('totalCapitalCost') || 0);
-      const year2026 = Number(get('year2026') || totalCapitalCost * 0.34);
-      const year2027 = Number(get('year2027') || totalCapitalCost * 0.33);
-      const year2028 = Number(get('year2028') || totalCapitalCost * 0.33);
+      const year2026 = Number(get('year2026') || totalCapitalCost * YEAR_SPLIT.year2026);
+      const year2027 = Number(get('year2027') || totalCapitalCost * YEAR_SPLIT.year2027);
+      const year2028 = Number(get('year2028') || totalCapitalCost * YEAR_SPLIT.year2028);
       return {
         id: `UP-${String(i + 1).padStart(4, '0')}`,
         name: get('capability') || `Uploaded initiative ${i + 1}`,
@@ -436,7 +439,7 @@ const applyMappedDataset = () => {
         valueStream: get('valueStream') || 'Shared Services',
         portfolioName: get('portfolioName') || 'Enterprise Services',
         funded,
-        fundingStatus: normalizeFundingStatus(get('status'), funded),
+        fundingStatus: mappedStatus,
         fundingSource: get('fundingSource') || 'Uploaded',
         driver: normalizeDriver(get('driver')),
         recommendation: normalizeRecommendation(get('recommendation')),

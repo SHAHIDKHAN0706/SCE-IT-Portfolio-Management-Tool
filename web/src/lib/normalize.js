@@ -43,6 +43,7 @@ export const normalizeFunded = (value) => {
 };
 
 export const normalizeHeaderKey = (header) => {
+  // Intentional aggressive normalization to catch common delimiter variants.
   const h = String(header ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '');
   const aliases = {
     capability: ['capability', 'initiative', 'projectname'],
