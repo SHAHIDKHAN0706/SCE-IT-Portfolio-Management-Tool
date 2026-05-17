@@ -2,12 +2,71 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>web</title>
+    <title>SCE IT Portfolio Management Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/styles.css" />
+    <script src="./public/vendor/chart.umd.min.js"></script>
+    <script src="./public/vendor/xlsx.full.min.js"></script>
+    <script src="./public/vendor/pptxgen.bundle.min.js"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="sidebar-brand">SCE IT</div>
+        <nav id="sidebarNav" aria-label="Main navigation"></nav>
+        <section class="filters" aria-label="Filters">
+          <h2>Filters</h2>
+          <label>Portfolio Name<select id="filterPortfolio"></select></label>
+          <label>Value Stream<select id="filterValueStream" multiple></select></label>
+          <label>Funding Status<select id="filterFundingStatus" multiple></select></label>
+          <label>Driver<select id="filterDriver" multiple></select></label>
+          <label>Recommendation<select id="filterRecommendation" multiple></select></label>
+          <label>BCR Threshold<select id="filterBcrThreshold">
+            <option value="all">All</option><option value="hasBcr">Has BCR</option><option value="gte1">≥ 1.0</option><option value="gte2">≥ 2.0</option><option value="lt1">&lt; 1.0</option>
+          </select></label>
+          <label>Search<input id="filterSearch" type="search" placeholder="capability, sponsor, id..." /></label>
+          <div class="filter-actions">
+            <button id="runAnalysis" class="btn btn-primary">Run Analysis</button>
+            <button id="resetFilters" class="btn">Reset filters</button>
+          </div>
+        </section>
+      </aside>
+      <main class="main">
+        <header class="topbar">
+          <div class="brand-mark">SCE IT Portfolio Management Tool</div>
+          <div class="top-controls">
+            <label class="btn"><input id="loadXlsx" type="file" accept=".xlsx,.xlsm,.csv" hidden />Load .xlsx</label>
+            <button id="generateDeck" class="btn btn-primary">Generate Executive Deck</button>
+            <button id="refreshData" class="btn">Refresh Data</button>
+          </div>
+        </header>
+        <div class="content-wrap">
+          <section id="activeChips" class="chips" aria-label="Active filters"></section>
+          <section id="kpiRail" class="kpi-rail"></section>
+          <section id="viewContent"></section>
+        </div>
+      </main>
+    </div>
+
+    <dialog id="mappingModal">
+      <form method="dialog" class="mapping-panel">
+        <h3>Column Mapping Wizard</h3>
+        <label>Sheet
+          <select id="sheetPicker"></select>
+        </label>
+        <div id="mappingFields"></div>
+        <div class="mapping-actions">
+          <button id="resetBundled" type="button" class="btn">Reset to bundled data</button>
+          <button id="cancelMapping" type="button" class="btn">Cancel</button>
+          <button id="applyMapping" type="button" class="btn btn-primary">Apply mapping</button>
+        </div>
+        <p id="mappingError" class="mapping-error" aria-live="polite"></p>
+      </form>
+    </dialog>
+
+    <script type="module" src="./src/app.js"></script>
   </body>
 </html>

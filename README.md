@@ -1,67 +1,31 @@
 # SCE IT Portfolio Management Tool
 
-React 18 + Vite web app and FastAPI backend for SCE IT portfolio analytics and prioritization.
+A static, single-file-deployable portfolio analytics web app for executive IT capital planning. Quickstart: open `web/index.html` directly in a browser for local review, OR visit the live demo at https://shahidkhan0706.github.io/SCE-IT-Portfolio-Management-Tool/.
 
-## Quickstart
+## Live demo
 
-```bash
-# web
-cd web
-npm install
-npm run dev
+- https://shahidkhan0706.github.io/SCE-IT-Portfolio-Management-Tool/
 
-# api
-cd ../api
-pip install -e .[test]
-uvicorn src.main:app --reload
-```
+## How to enable Pages (one-time)
 
-## Full stack (docker)
-
-```bash
-docker compose up
-```
-
-- Web: http://localhost:5173
-- API docs: http://localhost:8000/docs
-
-## Screenshots
-
-- `docs/assets/overview.png` (placeholder)
-- `docs/assets/prioritization.png` (placeholder)
-- `docs/assets/deck-thumbnail.png` (placeholder)
+> In **Settings → Pages**, set **Source** to **GitHub Actions** once so workflow deployments can publish the app.
 
 ## Deploy
 
-### Public demo — GitHub Pages (web only)
+The workflow at `.github/workflows/deploy.yml` runs on every push to `main`, packages `web/` as a Pages artifact, deploys with `actions/deploy-pages`, and writes the resulting Pages URL to the workflow summary.
 
-The web app is a static SPA that loads `public/sample/snapshot.json` as seed
-data, so it can be hosted on GitHub Pages with no backend.
+## Screenshot
 
-A workflow at `.github/workflows/deploy-pages.yml` builds `web/` and publishes
-`web/dist` to Pages on every push to `main`. To enable:
+![Portfolio overview placeholder](docs/screenshot-overview.png)
 
-1. In repo **Settings → Pages**, set **Source** to **GitHub Actions**.
-2. Push to `main` (or run the workflow manually via the Actions tab).
-3. The site will be available at
-   `https://shahidkhan0706.github.io/SCE-IT-Portfolio-Management-Tool/`.
+## Project layout
 
-Vite's `base` is set to `/SCE-IT-Portfolio-Management-Tool/` in
-`web/vite.config.ts` so asset and router paths resolve correctly under the
-project Pages URL. Override with `VITE_BASE=/` to host at the domain root
-(e.g. a custom domain or user/organization Pages site).
-
-### Full stack (manual / container hosts)
-
-- Build web: `cd web && npm run build`
-- Run API: `cd api && uvicorn src.main:app --host 0.0.0.0 --port 8000`
-- Use `Dockerfile.web` / `Dockerfile.api` for containerized deploys (e.g.
-  Render, Railway, Fly.io, Azure Container Apps, AWS App Runner, Cloud Run).
-  Point the web build at the public API URL by wiring a build-time env var
-  when/if the frontend gains runtime API calls.
+- `web/` static app (HTML + CSS + vanilla JS + Chart.js + SheetJS + PptxGenJS)
+- `web/public/sample/snapshot.json` bundled synthetic snapshot data
+- `docs/` data model, slide spec, and connector notes
+- `api/` and `infrastructure/` placeholders for future PRs
 
 ## References
 
-- [Build prompt](./SCE_IT_Portfolio_Tool_BUILD_PROMPT.md)
+- [Build Prompt](./SCE_IT_Portfolio_Tool_BUILD_PROMPT.md)
 - [Architecture](./ARCHITECTURE.md)
-- [Prioritization](./docs/prioritization.md)

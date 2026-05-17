@@ -6,39 +6,20 @@ on:
     branches: [main]
 
 jobs:
-  web:
-    permissions:
-      contents: read
+  static-checks:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npm run build
-      - name: Enforce color tokens
+      - name: HTML validation
+        run: npx --yes htmlhint "web/**/*.html"
+      - name: JS lint
         run: |
-          if rg -n "#[0-9A-Fa-f]{6}" src --glob "*.{css,tsx,ts}" --glob "!src/styles/tokens.css"; then
-            echo "Hard-coded hex colors found outside tokens.css";
-            exit 1;
+          files=$(find web -type f -name "*.js" -not -path "*/node_modules/*" -not -path "*/dist/*" -not -path "*/public/vendor/*" | tr '\n' ' ')
+          if [ -n "$files" ]; then
+            npx --yes eslint $files --no-config-lookup --global window --global document --global localStorage --global Blob --global URL --global Option --global fetch --rule "no-unused-vars:error" --rule "no-undef:error"
+          else
+            echo "No JS files found in web/; skipping eslint."
           fi
-  api:
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: api
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: pip install -e .[test]
-      - run: pytest
